@@ -3,19 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <title>Instagram 팔로워 관리</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: 50px auto; border: 1px solid #ddd; border-radius: 8px;}
-    h1 { color: #333; text-align: center;}
-    .guide { background: #f9f9f9; padding: 20px; border-radius: 8px; }
-    ol { line-height: 1.6; }
-    li { margin: 5px 0; }
-    a { color: #007bff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    #status { margin-left: 10px; font-weight: bold; color: green; }
-    #resultCount { margin-left: 10px; color: #333; }
-    ul { padding-left: 20px; }
-    input { display: block; margin-bottom: 10px;}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+    body {
+  font-family: sans-serif;
+  padding: 5vw;  /* 화면 너비 기준으로 패딩 조정 */
+  max-width: 800px;
+  margin: 20px auto;  /* 모바일에선 margin 줄이기 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;  /* 기본 폰트 크기 */
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  font-size: 1.8rem; /* 조금 키움 */
+}
+
+h2 {
+  font-size: 1.4rem; /* 추가: 소제목 크기 */
+}
+
+.guide {
+  background: #f9f9f9;
+  padding: 1.2rem;
+  border-radius: 8px;
+}
+
+ol {
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+li {
+  margin: 0.5rem 0;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#status {
+  margin-left: 0.5rem;
+  font-weight: bold;
+  color: green;
+}
+
+#resultCount {
+  margin-left: 0.5rem;
+  color: #333;
+}
+
+ul {
+  padding-left: 1.5rem;
+  font-size: 1rem;
+}
+
+input {
+  display: block;
+  margin: 1rem 0;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 5vw;
+    margin: 10px auto;
+    font-size: 1rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.2rem;
+  }
+  input {
+    font-size: 1rem;
+  }
+}
   </style>
 </head>
 <body>
@@ -24,28 +96,33 @@
   <div class="guide">
     <h2>사용방법</h2>
     <ol>
-      <li><a href="https://accountscenter.instagram.com/info_and_permissions/dyi/?entry_point=deeplink_screen" target="_blank">인스타그램 데이터 요청 사이트</a>에 접속</li>
-      <li>로그인 안 되어 있으면 로그인하기</li>
+      <li><a href="https://accountscenter.instagram.com/info_and_permissions/dyi/?entry_point=deeplink_screen" target="_blank">인스타그램 정보 요청 사이트(클릭)</a>에 접속</li>
+      <li>로그인 안 되어 있으면 하기</li>
       <li><strong>"정보 다운로드 또는 전송"</strong> 클릭</li>
       <li><strong>"일부 정보"</strong> 클릭</li>
-      <li>쭉 내려가다 "연결 활동" 항목에서 <strong>"팔로워 및 팔로잉"</strong>만 체크 후 "다음" 클릭</li>
+      <li>쭉 내려가다 <strong>"팔로워 및 팔로잉"</strong>에 체크 후 "다음" 클릭</li>
       <li><strong>"기기에 다운로드"</strong> 클릭</li>
-      <li>"기간" → "전체 기간", <br/>"형식" → "JSON", <br/>"미디어 품질" → "낮음" 선택 후 저장</li>
-      <li><strong>"파일 만들기"</strong> 클릭 → 10분 정도 기다리면 7번의 "알림" 항목에 있던 이메일 주소로 "Your Meta information download is ready" 라는 제목의 이메일이 도착함</li>
-      <li>이메일 받으면 다시 <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/?entry_point=deeplink_screen" target="_blank">1번의 사이트</a> 접속해서 <strong>"다운로드"</strong> 클릭</li>
-      <li>다운로드된 폴더 <strong>압축 해제</strong>하기 (파일 탐색기 > 다운로드에 "instagram-"으로 시작하는 폴더)</li>
-      <li>아래 "파일 선택" 버튼 클릭 후, 방금 <strong>압축 해제한 폴더</strong> 선택하여 업로드</li>
+      <li>기간 → <strong>"전체 기간"</strong> 선택 후 저장,<br/>형식 → <strong>"JSON"</strong> 선택 후 저장,<br/>미디어 품질 → <strong>"낮음"</strong> 선택 후 저장</li>
+      <li><strong>"파일 만들기"</strong> 클릭</li>
+      <br/>(10분 정도 기다리기...)<br/><br/>
+      <li>다시 <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/?entry_point=deeplink_screen" target="_blank">인스타그램 정보 요청 사이트(클릭)</a>에 접속</li>
+      <li><strong>"다운로드"</strong> 클릭</li>
+      <li>비밀번호 입력하기</li>
     </ol>
   </div>
 
-  <br/><input type="file" id="folderInput" webkitdirectory directory multiple /><br/>
+  <br/>
+  <p>아래 버튼 클릭 → 사진 및 동영상 → 내 파일 → <strong>방금 받은 폴더(instagram으로 시작)</strong> 선택 후 "완료"</p>
+  <input type="file" id="zipInput" accept=".zip" />
+  <br/>
   <span id="status"></span>
   <br><br>
 
-
-  <h2>맞팔 안 된 계정 목록<span id="resultCount"></span></h2>
+  <h2>🔥맞팔 안 된 계정:<span id="resultCount"></span></h2>
   <span id="note">여기에 결과가 표시됩니다.</span>
   <ul id="resultList"></ul>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

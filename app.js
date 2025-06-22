@@ -1,55 +1,55 @@
 let followersFile = null;
 let followingFile = null;
 
-const folderInput = document.getElementById('folderInput');
+const zipInput = document.getElementById('zipInput');
 const statusSpan = document.getElementById('status');
 const resultCount = document.getElementById('resultCount');
 const resultList = document.getElementById('resultList');
 const note = document.getElementById("note");
 
-folderInput.addEventListener('change', handleFolderUpload);
+zipInput.addEventListener('change', handleZipUpload);
 
-function handleFolderUpload(event) {
-  const files = event.target.files;
+async function handleZipUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
   followersFile = null;
   followingFile = null;
 
-  for (const file of files) {
-    if (file.webkitRelativePath.includes('followers_1.json')) {
-      followersFile = file;
-    } else if (file.webkitRelativePath.includes('following.json')) {
-      followingFile = file;
+  const jszip = new JSZip();
+  const zip = await jszip.loadAsync(file);
+
+  zip.forEach((relativePath, zipEntry) => {
+    if (relativePath.includes('followers_1.json')) {
+      followersFile = zipEntry;
+    } else if (relativePath.includes('following.json')) {
+      followingFile = zipEntry;
     }
-  }
+  });
 
   if (followersFile && followingFile) {
-    statusSpan.textContent = "파일 업로드 성공 ✅";
+    statusSpan.textContent = "ZIP 업로드 성공 ✅";
     processData();
   } else {
-    statusSpan.textContent = "필요한 파일이 없습니다 ❌";
+    statusSpan.textContent = "ZIP에서 followers_1.json 또는 following.json을 찾지 못했습니다 ❌";
     statusSpan.style.color = "red";
   }
 }
 
-function processData() {
-  
+
+async function processData() {
   if (!followersFile || !followingFile) {
-    alert('먼저 폴더를 업로드해주세요.');
+    alert('먼저 ZIP파일을 업로드해주세요.');
     return;
   }
-  
-  Promise.all([
-    followersFile.text().then(JSON.parse),
-    followingFile.text().then(JSON.parse)
-  ]).then(([followersJson, followingJson]) => {
+  try {
+    const followersJson = JSON.parse(await followersFile.async("string"));
+    const followingJson = JSON.parse(await followingFile.async("string"));
+
     const followers = followersJson.map(f => f.string_list_data[0].value);
     const following = followingJson.relationships_following.map(f => f.string_list_data[0]);
 
-    // 맞팔 안 된 계정 + timestamp 포함
     let notFollowedBack = following.filter(f => !followers.includes(f.value));
-
-    // 오래된 순으로 정렬 (timestamp는 내가 팔로우한 시간)
     notFollowedBack.sort((a, b) => a.timestamp - b.timestamp);
 
     resultList.innerHTML = '';
@@ -62,7 +62,6 @@ function processData() {
       notFollowedBack.forEach(account => {
         const li = document.createElement('li');
 
-        // 날짜 표시 (UTC timestamp -> YYYY-MM-DD)
         const date = new Date(account.timestamp * 1000);
         const dateStr = date.toISOString().split('T')[0];
 
@@ -77,15 +76,15 @@ function processData() {
         });
 
         li.appendChild(link);
-        li.append(` (${dateStr})`); // 날짜 붙이기
+        li.append(` (${dateStr})`);
 
         resultList.appendChild(li);
       });
     }
 
-    resultCount.textContent = `(${notFollowedBack.length}명)`;
-  }).catch(err => {
+    resultCount.textContent = `${notFollowedBack.length}명`;
+  } catch (err) {
     console.error(err);
-    alert("JSON 파싱에 실패했습니다. 파일이 올바른지 확인해주세요.");
-  });
+    alert("ZIP 내부 JSON 파싱 실패: 파일 구조를 확인하세요.");
+  }
 }
